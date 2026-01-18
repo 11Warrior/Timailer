@@ -26,7 +26,7 @@ export default function EmailStats() {
 
     // }, [])
     return (
-        <div className="w-full">
+        <div className="w-full h-screen">
             {emails.map((email, idx) => (
                 <div key={idx} className="w-full flex items-center justify-between px-6 py-4 border-b hover:bg-muted/40 cursor-pointer">
                     <div className="flex items-center gap-4">

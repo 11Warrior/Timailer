@@ -25,6 +25,7 @@ model Email {
     receiverEmail String[]
     subject String
     body String
+    attachmentImage String?
     scheduledAt DateTime
     status String
     createdAt DateTime @default(now())

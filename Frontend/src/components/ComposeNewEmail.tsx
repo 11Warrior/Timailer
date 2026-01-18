@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Paperclip, Upload } from 'lucide-react'
+import { ArrowLeft, CalendarIcon, Clock, Paperclip, Upload } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 import { Separator } from "@/components/ui/separator";
@@ -12,14 +12,29 @@ import {
     Undo,
     Redo,
 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import { parseEmails } from '@/lib/utils';
+import { Dialog, DialogContent, DialogFooter } from './ui/dialog';
+import { DialogClose, DialogTrigger } from '@radix-ui/react-dialog';
+import { Calendar } from './ui/calendar';
+import { Popover, PopoverTrigger } from './ui/popover';
+import { PopoverContent } from '@radix-ui/react-popover';
+import { Input } from './ui/input';
+
 
 type BodyDataType = {
     senderEmail: string,
     receiverEmail: string[],
+    scheduledAt: string,
     subject: string,
     body: string
+}
+
+type DateAndTimeType = {
+    date: Date,
+    time: string
 }
 
 
@@ -27,10 +42,19 @@ const ComposeNewEmail = () => {
     const [bodyData, setbodyData] = useState<BodyDataType>({
         senderEmail: " ",
         receiverEmail: [""],
+        scheduledAt: "",
         subject: "",
         body: ""
     });
-    // const [receiverEmails, setReceiverEmails] = useState<string[]>();
+
+
+
+    const [dateAndTime, setDateAndTime] = useState<DateAndTimeType>({
+        date: new Date(),
+        time: "10:00:00"
+    })
+
+    const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
 
     const handleSend = () => {
         //sending logic calling backend scheduling things
@@ -65,6 +89,7 @@ const ComposeNewEmail = () => {
     // console.log(senderEmail)
 
     return (
+
         <section className='w-full h-screen'>
             <div className='w-full h-[6vw] p-4  flex items-center justify-between'>
                 <div className='flex gap-2 text-2xl items-center'>
@@ -81,7 +106,105 @@ const ComposeNewEmail = () => {
                         <Paperclip width={20} className=" bg-amber-50 text-muted-foreground cursor-pointer" />
                     </label>
 
-                    <Clock width={20} className="text-muted-foreground cursor-pointer" />
+
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Clock className={`cursor-pointer  ${dateAndTime?.date ? 'text-green-600' : 'text-muted-foreground'}`} />
+                        </DialogTrigger>
+
+                        <DialogContent className="w-80 px-3 py-5">
+                            <p className="mb-3 text-2xl ">Send Later</p>
+                            <div className='flex px-3 py-2 justify-between items-center border-b border-gray-200'>
+                                <span>
+                                    {dateAndTime?.date.toDateString() + " at " + dateAndTime.time}
+                                </span>
+                                <Dialog>
+                                    <DialogTrigger asChild  >
+                                        <CalendarIcon className='cursor-pointer' />
+                                    </DialogTrigger>
+                                    <DialogContent className='flex flex-col gap-5'>
+                                        <div className='flex flex-col'>
+                                            <label htmlFor='pick-date'>
+                                                Pick Date
+                                            </label>
+                                            <Popover open={scheduleModalOpen} onOpenChange={setScheduleModalOpen}>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant={'default'}
+                                                        id='pick-date'
+                                                        className='cursor-pointer'
+                                                    >
+                                                        {dateAndTime?.date ? dateAndTime?.date.toDateString() : "Select Date"}
+                                                    </Button>
+                                                </PopoverTrigger>
+
+                                                <PopoverContent>
+                                                    <Calendar
+                                                        mode='single'
+                                                        selected={dateAndTime?.date}
+                                                        buttonVariant={'secondary'}
+                                                        onSelect={(date: Date) => {
+                                                            setDateAndTime({ ...dateAndTime, date, time: "" });
+                                                            setScheduleModalOpen(false);
+                                                        }}
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+
+                                        <div>
+                                            <label htmlFor="pick-time" className="px-1">
+                                                Time
+                                            </label>
+                                            <Input
+                                                type="time"
+                                                id="pick-time"
+                                                value={dateAndTime?.time}
+                                                onChange={(e) => {
+                                                    setDateAndTime({ ...dateAndTime, time: e.target.value })
+                                                }}
+                                                step="1"
+                                                defaultValue="10:30:00"
+                                                className="bg-background "
+                                            />
+                                        </div>
+
+                                        <DialogClose>
+                                            <Button variant={'default'} className='cursor-pointer'>
+                                                Done
+                                            </Button>
+                                        </DialogClose>
+
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+
+                            <Button variant="ghost" className="w-full justify-start ">
+                                Tomorrow, 10:00 AM
+                            </Button>
+
+                            <Button variant="ghost" className="w-full justify-start">
+                                Tomorrow, 11:00 AM
+                            </Button>
+                            <Button variant="ghost" className="w-full justify-start">
+                                Tomorrow, 3:00 PM
+                            </Button>
+
+
+                            <DialogFooter className="mt-4 flex justify-end gap-2">
+                                <DialogClose>
+                                    <Button variant="ghost" className='cursor-pointer'>Cancel</Button>
+                                </DialogClose>
+                                <DialogClose>
+                                    <Button className="bg-green-500 hover:bg-green-600 cursor-pointer">
+                                        Done
+                                    </Button>
+
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+
                     <button className="rounded-full px-8 py-1 bg-white border border-green-600 text-green-600 hover:bg-green-600 hover:text-white cursor-pointer duration-200 ease" onClick={() => handleSend()}>
                         Send
                     </button>
@@ -172,6 +295,9 @@ const ComposeNewEmail = () => {
                         className="min-h-65 w-full resize-none bg-transparent p-4 outline-none"
                     />
                 </div>
+
+
+
 
             </div>
         </section>

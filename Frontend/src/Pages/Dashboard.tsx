@@ -35,11 +35,14 @@ const Dashboard = () => {
   if (!data) return <LoadingUI />
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-screen h-screen">
       <Navbar />
       <div className="flex gap-10  w-screen h-screen">
         <Sidebar userData={data} />
-        <EmailStats />
+        <div className="w-full">
+
+          <EmailStats />
+        </div>
       </div>
     </div>
 

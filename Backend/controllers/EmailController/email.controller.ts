@@ -6,7 +6,7 @@ import { emailQueue } from "../../config/email.queue.ts";
 
 export const scheduleEmail = async (req: Request, res: Response) => {
     try {
-        const { userId, senderEmail, receiverEmail, subject, body, scheduledAt } = req.body;
+        const { userId, senderEmail, receiverEmail, subject, body, scheduledAt, attachmentImage } = req.body;
 
         const user = await prisma.user.findUnique({
             where: { id: userId }
@@ -21,6 +21,7 @@ export const scheduleEmail = async (req: Request, res: Response) => {
                 receiverEmail,
                 subject,
                 body,
+                attachmentImage: attachmentImage || "",
                 scheduledAt: new Date(scheduledAt),
                 status: "Scheduled",
                 createdAt: new Date()
