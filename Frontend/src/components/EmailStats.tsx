@@ -1,53 +1,49 @@
-import { Badge, Star } from "lucide-react";
-import { useEffect, useState } from "react";
+import { formatEmailTime } from "@/lib/utils";
+import type { EmailProp } from "@/Pages/Dashboard";
+import { Badge, ClockIcon, Star, StarIcon } from "lucide-react";
 
-const emails = [
-    {
-        to: "John Smith",
-        subject: "Meeting follow-up",
-        preview: "Hi John, just wanted to follow up on our meeting...",
-        time: "Tue 9:15:12 AM",
-        status: "Scheduled",
-    },
-    {
-        to: "Olive",
-        subject: "Ramit, great to meet you",
-        preview: "Hi Olive, just wanted to follow up on our meeting...",
-        time: "Thu 8:15:12 PM",
-        status: "Scheduled",
-    },
-];
-
-
-export default function EmailStats() {
-    const [emailData, setEmailData] = useState();
-
-    // useEffect(() => {
-
-    // }, [])
+export default function EmailStats({ emails }: { emails: EmailProp[] }) {
+    // emails.map((email) => (console.log(email)))
+    // console.log(emails)
     return (
-        <div className="w-full h-screen">
-            {emails.map((email, idx) => (
-                <div key={idx} className="w-full flex items-center justify-between px-6 py-4 border-b hover:bg-muted/40 cursor-pointer">
-                    <div className="flex items-center gap-4">
-                        <Badge
-                            className="rounded-full bg-orange-100 text-orange-600"
-                        >
-                            {email.time}
-                        </Badge>
+        <div className="max-w-full h-screen">
+            {emails?.map((email) => (
+                <div key={email.id} className="flex items-center justify-between px-7 py-2  border-b border-gray-200">
+                    <div className="flex">
+                        <span className="text-sm font-medium text-gray-900 pr-40">
+                            To: {email.receiverEmail[0]}
+                        </span>
 
-                        <div>
-                            <p className="text-sm">
-                                <span className="font-medium">To:</span> {email.to}
-                            </p>
-                            <p className="text-sm font-medium">{email.subject}</p>
-                            <p className="text-xs text-muted-foreground">{email.preview}</p>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-xs font-medium">
+                                {email.status === "Scheduled" ? (
+                                    <>
+                                        <ClockIcon /> {new Date(email.scheduledAt).toDateString() + " " + formatEmailTime(new Date(email.scheduledAt).toISOString())}
+                                    </>
+                                )
+                                    :
+                                    "Sent"
+                                }
+                            </span>
+
+                            <span className="font-medium text-gray-800">
+                                {email.subject}
+                            </span>
+
+                            <span className="text-gray-400 truncate max-w-md">
+                                - {email.body}
+                            </span>
                         </div>
                     </div>
 
-                    <Star className="text-muted-foreground hover:text-yellow-400" size={18} />
+
+                    {/* Right: Star */}
+                    < button className="text-gray-300 hover:text-yellow-400" >
+                        <StarIcon />
+                    </button>
                 </div>
-            ))}
-        </div>
+            ))
+            }
+        </div >
     );
 }

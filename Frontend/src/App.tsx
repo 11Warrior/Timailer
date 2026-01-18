@@ -5,6 +5,7 @@ import Dashboard from "./Pages/Dashboard"
 import ComposeNewEmail from "./components/ComposeNewEmail"
 
 const App = () => {
+
   return (
 
     <div className='flex w-screen h-screen'>

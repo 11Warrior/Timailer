@@ -1,5 +1,5 @@
 import { ArrowLeft, CalendarIcon, Clock, Paperclip, Upload } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Navigate, redirect, useLocation, useNavigate } from 'react-router-dom'
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -15,20 +15,21 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
-import { parseEmails } from '@/lib/utils';
+import { backendURL,  parseEmails } from '@/lib/utils';
 import { Dialog, DialogContent, DialogFooter } from './ui/dialog';
 import { DialogClose, DialogTrigger } from '@radix-ui/react-dialog';
 import { Calendar } from './ui/calendar';
 import { Popover, PopoverTrigger } from './ui/popover';
 import { PopoverContent } from '@radix-ui/react-popover';
 import { Input } from './ui/input';
+import axios from 'axios';
 
 
 type BodyDataType = {
     senderEmail: string,
     receiverEmail: string[],
-    scheduledAt: string,
     subject: string,
+    attachmentImage: string,
     body: string
 }
 
@@ -39,15 +40,20 @@ type DateAndTimeType = {
 
 
 const ComposeNewEmail = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const senderEmail = location.state.senderEmail;
+    const userId = location.state.userId;
+    // console.log(senderEmail)
+    // console.log(userId);
+
     const [bodyData, setbodyData] = useState<BodyDataType>({
-        senderEmail: " ",
+        senderEmail: senderEmail,
         receiverEmail: [""],
-        scheduledAt: "",
         subject: "",
+        attachmentImage: "",
         body: ""
     });
-
-
 
     const [dateAndTime, setDateAndTime] = useState<DateAndTimeType>({
         date: new Date(),
@@ -56,19 +62,64 @@ const ComposeNewEmail = () => {
 
     const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
 
-    const handleSend = () => {
-        //sending logic calling backend scheduling things
-        console.log(bodyData);
+    const handleSend = (e: Event) => {
+        //sending logic calling backend scheduling things // console.log(senderEmail)
+        const date = dateAndTime.date;
+        const time = dateAndTime.time;
+
+        const [hh, mm, ss] = time.split(":");
+
+        date.setHours(
+            Number(hh),
+            Number(mm),
+            Number(ss)
+        )
+
+        console.log(new Date(date).toISOString());
+
+        // setbodyData({ ...bodyData })
+        // console.log(bodyData);
+        // console.log(dateAndTime.date, dateAndTime.time)
+        const payload = {
+            ...bodyData,
+            userId,
+            scheduledAt: new Date(date).toISOString() as string
+        }
+
+        // console.log(payload)
+
+        axios({
+            url: `${backendURL}/timailer/schedule-email`,
+            method: 'post',
+            data: payload
+        },
+        )
+            .then(() => {
+                console.log("Sucessfully scheduled Email")
+            })
+            .catch((error) => {
+                console.log("Error while calling /schedule-email from Frontend", error);
+            })
+
+        setbodyData({
+            ...bodyData,
+            subject: "",
+            attachmentImage: "",
+            body: ""
+        })
+        
+        navigate('/dashboard')
+        e.preventDefault();
     }
 
     const handleFileUpload = (file: File) => {
         const reader = new FileReader();
 
         reader.onload = e => {
-            console.log(e.target);
+            // console.log(e.target);
             const content = e.target?.result as string;
             const parsedEmailList = parseEmails(content);
-            console.log(parsedEmailList);
+            // console.log(parsedEmailList);
             // setReceiverEmails(parsedEmailList);
             setbodyData({ ...bodyData, receiverEmail: parsedEmailList })
         }
@@ -84,9 +135,7 @@ const ComposeNewEmail = () => {
         reader.readAsText(file);
     }
 
-    const location = useLocation();
-    const senderEmail = location.state;
-    // console.log(senderEmail)
+
 
     return (
 
@@ -205,7 +254,7 @@ const ComposeNewEmail = () => {
                         </DialogContent>
                     </Dialog>
 
-                    <button className="rounded-full px-8 py-1 bg-white border border-green-600 text-green-600 hover:bg-green-600 hover:text-white cursor-pointer duration-200 ease" onClick={() => handleSend()}>
+                    <button className="rounded-full px-8 py-1 bg-white border border-green-600 text-green-600 hover:bg-green-600 hover:text-white cursor-pointer duration-200 ease" onClick={(e) => handleSend(e)}>
                         Send
                     </button>
                 </div>
@@ -215,8 +264,8 @@ const ComposeNewEmail = () => {
                 {/* From */}
                 <div className="grid grid-cols-[80px_1fr] items-center gap-3">
                     <label>From</label>
-                    <select defaultValue="oliver" className='px-3 py-2 bg-gray-200 rounded-lg w-fit active:outline-1 active:outline-green-600' >
-                        <option className='' onClick={() => setbodyData({ ...bodyData, senderEmail })}>{senderEmail}</option>
+                    <select onChange={(e) => setbodyData({ ...bodyData, senderEmail: e.target.value })} className='px-3 py-2 bg-gray-200 rounded-lg w-fit active:outline-1 active:outline-green-600' >
+                        <option className='' value={senderEmail}>{senderEmail}</option>
                     </select>
                 </div>
 

@@ -50,9 +50,11 @@ export const scheduleEmail = async (req: Request, res: Response) => {
     }
 }
 
-export const getEmails = async (id: string) => {
+export const getEmails = async (req: Request, res: Response) => {
     try {
-        const user = await prisma.user.findUnique({ where: { id } });
+        const { userId } = req.params
+        // console.log(userId);
+        const user = await prisma.user.findUnique({ where: { id: userId as string } });
         if (!user) return;
 
         const emails = await prisma.email.findMany({
@@ -60,15 +62,15 @@ export const getEmails = async (id: string) => {
         })
 
         const [scheduledEmails, sentEmails] = await Promise.all([
-            prisma.email.count({ where: { id: user.id, status: "Scheduled" } }),
-            prisma.email.count({ where: { id: user.id, status: "Sent" } }),
+            prisma.email.count({ where: { userId: user.id, status: "Scheduled" } }),
+            prisma.email.count({ where: { userId: user.id, status: "Sent" } }),
         ])
 
-        return {
+        return res.json({
             emails,
-            scheduleEmail,
+            scheduledEmails,
             sentEmails
-        }
+        })
 
     } catch (error) {
         console.log("Error while getting emails", error)

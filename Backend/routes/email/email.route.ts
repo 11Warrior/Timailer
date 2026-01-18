@@ -5,6 +5,6 @@ const EmailRouter =  Router();
 
 EmailRouter.post('/schedule-email', scheduleEmail)
 
-EmailRouter.get('/getEmails', getEmails)
+EmailRouter.get('/getEmails/:userId', getEmails)
 
 export default EmailRouter;
