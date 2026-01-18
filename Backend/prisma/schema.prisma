@@ -1,0 +1,35 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(uuid())
+  FullName String
+  Email String
+  Password String
+  profileImage String
+
+  emails Email[]
+
+  @@map("users")
+}
+
+model Email {
+    id String @id @default(cuid())
+    senderEmail String
+    receiverEmail String[]
+    subject String
+    body String
+    scheduledAt DateTime
+    status String
+    createdAt DateTime @default(now())
+
+    userId String
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

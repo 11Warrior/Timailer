@@ -1,0 +1,15 @@
+# env
+.env
+.env.*
+
+# dependencies
+node_modules/
+
+# build
+dist/
+build/
+
+# logs
+*.log
+dump.rdb
+
