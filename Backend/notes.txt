@@ -1,0 +1,38 @@
+1. Create a private GitHub repository (monorepo or separate folders for backend &
+frontend is fine).
+2. Grant access to user: Mitrajit
+3. Add a README that includes:
+○ How to run backend (Express, Redis, DB, BullMQ worker)
+○ How to run frontend
+○ How to set up Ethereal Email and env variables
+○ Architecture overview:
+■ How scheduling works
+■ How persistence on restart is handled
+■ How rate limiting & concurrency are implemented
+○ List of features implemented, mapped to:
+■ Backend: scheduler, persistence, rate limiting, concurrency
+■ Frontend: login, dashboard, compose, tables, etc.
+-----------------Above are completed tasks---------------------------
+
+Add a short demo video (max 5 minutes):
+○ Show creating scheduled emails (from frontend or Postman)
+-> done
+○ Show the dashboard with Scheduled and Sent emails
+->done
+○ Show a restart scenario:
+    => Persistance lets shutdown our worker and restart during time 11:04
+    Concept : 
+        bullmq adds jobs from the redis into the queue
+        Our redis is running and supporst persistance along with rate limiting features,
+
+        when our db goes down as in the scenario our redis still has the job in the queue and loaded in 
+        the worker once db comes up and boom task is performed no data is lost no concurrency is lost 
+
+        its 11:04 lets fire up our servers
+
+
+■ Stop server → start again → future emails still send
+○ (Bonus) Briefly demonstrate how rate limiting / delay behaves under load
+
+
+

@@ -23,7 +23,8 @@ export const callback = (req: Request, res: Response) => {
     res.cookie("my_token", token, {
         httpOnly: true,
         secure: false,
-        sameSite: "lax"
+        sameSite: "lax",
+        path: '/'
     });
 
 
@@ -53,5 +54,17 @@ export const getMe = async (req: Request, res: Response) => {
 }
 
 export const logOut = async (req: Request, res: Response) => {
+    try {
+        res.clearCookie('my_token', {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
+            path: '/'
+        });
 
+        res.redirect(`${process.env.FRONTEND_URL}/`)
+
+    } catch (error) {
+        console.log("Error while logging out", error)
+    }
 }

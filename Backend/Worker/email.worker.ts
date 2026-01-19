@@ -13,7 +13,7 @@ const DELAY = Number(process.env.DELAY!)
 // console.log(CONCURRENCY, MAX_EMAILS_PER_HOUR, DELAY)
 
 const worker = new Worker('email-queue', async (job: Job) => {
-    console.log(job.data);
+    // console.log(job.data);
     const { id } = job.data;
 
     const claim = await prisma.email.updateMany({
@@ -27,19 +27,21 @@ const worker = new Worker('email-queue', async (job: Job) => {
         where: { id }
     })
 
-    console.log(email);
+    // console.log(email);
     if (!email) return;
 
     const redisKey = `rate:${email.senderEmail}:${new Date().toISOString().slice(0, 13)}`
 
     const currentValue = await redis.incr(redisKey);
 
+    console.log(`[${new Date().toLocaleTimeString()}] Sending email to ${email.receiverEmail}`);
+
     console.log(currentValue);
 
     if (currentValue == 1) {
         await redis.expire(redisKey, 60 * 60 + 8)
     }
-    console.log("After Expiry check", currentValue);
+    // console.log("After Expiry check", currentValue);
     if (currentValue > MAX_EMAILS_PER_HOUR) {
         const nextOneHourWindow = 60 * 60 * 1000 - (
             + new Date().getMinutes() * 60 * 1000
@@ -75,7 +77,7 @@ const worker = new Worker('email-queue', async (job: Job) => {
             subject: email.subject,
             text: email.body
         })
-        
+
         console.log("Ethereal URL", nodemailer.getTestMessageUrl(mailInfo))
 
 

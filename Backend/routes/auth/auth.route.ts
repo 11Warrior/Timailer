@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { callback, getMe } from "../../controllers/AuthController/auth.controller.ts";
+import { callback, getMe, logOut } from "../../controllers/AuthController/auth.controller.ts";
 import '../../config/passport.config.ts'
 import { protectRoute } from "../../middlewares/auth.middlewares.ts";
 
@@ -20,6 +20,6 @@ authRoute.get(
 
 authRoute.get('/getMe', protectRoute, getMe)
 
-// authRoute.get('/logout', protectRoute, logOut)
+authRoute.get('/logout', logOut)
 
 export default authRoute;
