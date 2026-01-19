@@ -35,6 +35,193 @@ This service allows users to schedule emails for a future time, processes them r
 
 ---
 
+## 🏗️ Working Demo
+
+https://github.com/user-attachments/assets/8e8371dd-f1fc-45ef-8269-39dda6b8ffa9
+
+## ⚙️ Project Setup and Installations
+
+This project requires **Redis**, **PostgreSQL**, and environment variables for both **backend** and **worker**.
+
+---
+
+### 📄 Backend Environment Variables
+
+Create a `.env` file inside the **Backend/** directory.
+
+```env
+# Server
+PORT=3000
+NODE_ENV=development
+
+# Database
+DATABASE_URL=your postgress connection url that you got from Prisma console
+
+# Redis
+REDIS_HOST=127.0.0.1
+REDIS_PORT=5555
+
+# Worker Configuration
+CONCURRENCY=5             # jobs handling in parallel
+DELAY=1000                 # Delay between email sends (ms)
+MAX_EMAILS_PER_HOUR=200    # Per-sender rate limit
+
+# Auth / App (if applicable)
+JWT_SECRET=your_secret_key
+OAUTH_CLIENT_ID= your oauth client id from google console
+OAUTH_CLIENT_SECRET=your client secret from google console
+
+```
+
+📌 **Notes**
+
+* `DELAY` controls throttling (used for demo)
+* Redis **must stay running** for delayed jobs
+* PostgreSQL is used for persistent email state
+
+---
+
+## 🧱 Backend Setup & Run
+
+### 1️⃣ Install Dependencies
+
+```bash
+cd Backend
+npm install
+```
+
+---
+
+### 2️⃣ Start Redis
+
+```bash
+redis-server --port 5555
+```
+
+Verify Redis is running:
+
+```bash
+redis-cli -p 5555 ping
+# PONG
+```
+
+---
+
+### 3️⃣ Run Database Migrations
+
+```bash
+npx prisma migrate dev
+```
+
+(Optional)
+
+```bash
+npx prisma studio
+```
+
+---
+
+### 4️⃣ Start Backend API Server
+
+```bash
+npm run dev
+```
+
+Backend runs on:
+
+```
+http://localhost:3000
+```
+
+---
+
+### 5️⃣ Start Worker (Required)
+
+Open a **new terminal**:
+
+```bash
+cd Backend
+npm run worker
+```
+
+📌 The worker:
+
+* Consumes delayed jobs
+* Sends emails
+* Applies rate limiting and throttling
+
+---
+
+## 🎨 Frontend Setup & Run
+
+### 1️⃣ Install Dependencies
+
+```bash
+cd Frontend
+npm install
+```
+
+---
+
+### 2️⃣ Frontend Environment Variables
+
+Create `.env` in **Frontend/**:
+
+```env
+VITE_BACKEND_URL=http://localhost:3000 or your backend base endpoint
+```
+
+📌 Frontend uses **Vite**, so variables must start with `VITE_`.
+
+---
+
+### 3️⃣ Start Frontend
+
+```bash
+npm run dev
+```
+
+Frontend runs on:
+
+```
+http://localhost:5173 generally, you may have it on differnt port in case of busy.
+```
+
+---
+
+## 🔁 Required Services Summary
+
+| Service     | Required | Notes                     |
+| ----------- | -------- | ------------------------- |
+| Redis       | ✅        | Must stay running         |
+| PostgreSQL  | ✅        | Stores email records      |
+| Backend API | ✅        | Accepts schedule requests |
+| Worker      | ✅        | Sends emails              |
+| Frontend    | Optional | UI & dashboard            |
+
+---
+
+## 🧪 Quick Verification Checklist
+
+Before running the demo, ensure:
+
+* ✅ Redis is running
+* ✅ Database migrations applied
+* ✅ Backend server running
+* ✅ Worker running in separate terminal
+* ✅ Frontend connected to backend
+
+---
+
+## ⚠️ Common Issues
+
+* **Emails not sending** → Worker not running
+* **Scheduled emails lost** → Redis stopped
+* **No dashboard updates** → Backend not connected to DB
+* **Env variables not loading** → Restart server after `.env` change
+
+---
+
 ## 🧭 Architecture Overview
 
 ```
