@@ -37,7 +37,6 @@ export default function EmailStats({ emails }: { emails: EmailProp[] }) {
                     </div>
 
 
-                    {/* Right: Star */}
                     < button className="text-gray-300   hover:text-yellow-400" >
                         <StarIcon />
                     </button>

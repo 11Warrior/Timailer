@@ -8,7 +8,7 @@ const App = () => {
 
   return (
 
-    <div className='flex w-screen h-screen'>
+    <div className='flex w-screen h-screen overflow-hidden px-3'>
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/send-email" element={<ComposeNewEmail />} />

@@ -25,10 +25,16 @@ export type EmailProp = {
   subject: string
 }
 
+export type EmailResponse = {
+  emails: EmailProp,
+  scheduledEmails: number,
+  sentEmails: number;
+}
+
 
 const Dashboard = () => {
   const [data, setdata] = useState<FrontendAuthResponse>();
-  const [emails, setEmails] = useState();
+  const [emails, setEmails] = useState<EmailResponse>();
 
   useEffect(() => {
     try {
@@ -55,7 +61,7 @@ const Dashboard = () => {
   }, [data?.id])
 
   // console.log(data)
-  // console.log(emails, typeof(emails))
+  console.log(emails, typeof(emails))
   if (!data || !emails) return <LoadingUI />
 
   return (

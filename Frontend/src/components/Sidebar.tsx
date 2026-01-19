@@ -2,14 +2,24 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import type { EmailProp, FrontendAuthResponse } from "@/Pages/Dashboard";
 import { Mail, Clock, ArrowDownIcon, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import axios from "axios";
+import { backendURL } from "@/lib/utils";
 
 export default function Sidebar({ userData, emails }: { userData: FrontendAuthResponse }) {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    window.location.href = `${backendURL}/timailer/auth/logout`;
+  }
+
   // console.log(emails)
   return (
     <div className="flex h-full flex-col pb-4 ">
-      <div className="flex items-center justify-between mb-6  bg-[#F4F7F5] p-3 rounded-2xl">
+      <div className="flex items-center w-[15vw] justify-between mb-6  bg-[#F4F7F5] p-3 rounded-2xl">
         <div className="flex items-center  gap-3 ">
           <Avatar>
             <AvatarImage src={userData?.image} />
@@ -22,9 +32,24 @@ export default function Sidebar({ userData, emails }: { userData: FrontendAuthRe
           </div>
         </div>
 
-        <div className="cursor-pointer">
-          <ChevronDown />
-        </div>
+        <Popover>
+          <PopoverTrigger asChild className="cursor-pointer">
+            <ChevronDown />
+          </PopoverTrigger>
+          <PopoverContent className="w-fit">
+            <Button
+              variant={'default'}
+
+              className="cursor-pointer"
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Button>
+          </PopoverContent>
+        </Popover>
+
+
+
 
       </div>
 
