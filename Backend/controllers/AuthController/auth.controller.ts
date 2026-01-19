@@ -51,3 +51,7 @@ export const getMe = async (req: Request, res: Response) => {
         console.log("Error while getting authenticated user", error)
     }
 }
+
+export const logOut = async (req: Request, res: Response) => {
+
+}

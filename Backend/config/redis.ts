@@ -3,5 +3,6 @@ import  { Redis } from 'ioredis';
 
 export const redis = new Redis({
     host: "localhost",
-    port: 5555
+    port: 5555,
+    maxRetriesPerRequest: null
 })

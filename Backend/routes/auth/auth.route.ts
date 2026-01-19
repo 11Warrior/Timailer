@@ -20,4 +20,6 @@ authRoute.get(
 
 authRoute.get('/getMe', protectRoute, getMe)
 
+// authRoute.get('/logout', protectRoute, logOut)
+
 export default authRoute;

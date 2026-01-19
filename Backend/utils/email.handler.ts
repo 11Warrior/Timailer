@@ -1,11 +1,17 @@
 import nodemailer from 'nodemailer'
 
-export const emailHandler = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.ETHEREAL_USERNAME,
-        pass: process.env.ETHEREAL_PASSWORD
-    }
-})
+export const getEmailHandler = async () => {
+    const testAccount = await nodemailer.createTestAccount();
+    
+    const emailHandler = nodemailer.createTransport({
+        host: testAccount.smtp.host,
+        port: testAccount.smtp.port,
+        secure: testAccount.smtp.secure,
+        auth: {
+            user: testAccount.user,
+            pass: testAccount.pass
+        }
+    })
+
+    return emailHandler;
+}
