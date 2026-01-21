@@ -17,8 +17,8 @@ export const protectRoute = (req: Request, res: Response, next: NextFunction) =>
 
         if (!user) return res.status(401).json({ message: "User not found at protect route middleware" })
 
-        req.user = { id: user.id };
-        // console.log(req.user)
+        req.user = { id: user?.id };
+        console.log("Req.user in protected route :",req.user)
         next();
     } catch (error) {
         console.log("Error in protect Route middleware handler.", error)

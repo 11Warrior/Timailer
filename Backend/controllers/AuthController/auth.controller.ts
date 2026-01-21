@@ -27,13 +27,18 @@ export const callback = (req: Request, res: Response) => {
         path: '/'
     });
 
-
     res.redirect(`${process.env.FRONTEND_URL!}/dashboard`)
 }
 
 export const getMe = async (req: Request, res: Response) => {
     try {
+        if (!req.user) {
+            return res.status(401).json({message: "Unauthorized"})
+        }
+        console.log("Req.use in getMe", req.user);
+
         const { id } = req?.user as { id: string };
+
         const user = await prisma.user.findUnique({
             where: { id },
             include: {

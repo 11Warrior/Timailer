@@ -10,7 +10,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL!,
+    origin: "https://timailer.vercel.app",
     credentials: true,
 }))
 
