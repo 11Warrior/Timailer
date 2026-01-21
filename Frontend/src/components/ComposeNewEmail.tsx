@@ -124,10 +124,6 @@ const ComposeNewEmail = () => {
             setbodyData({ ...bodyData, receiverEmail: parsedEmailList })
         }
 
-        reader.onloadstart = e => {
-            return <p>Loading</p>
-        }
-
         reader.onerror = e => {
             console.log("Error is: ", e.target?.error);
         }

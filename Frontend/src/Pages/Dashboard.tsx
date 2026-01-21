@@ -26,7 +26,7 @@ export type EmailProp = {
 }
 
 export type EmailResponse = {
-  emails: EmailProp,
+  emails: EmailProp[],
   scheduledEmails: number,
   sentEmails: number;
 }
@@ -64,6 +64,7 @@ const Dashboard = () => {
 
   // console.log(data)
   // console.log(emails, typeof(emails))
+  // console.log(emails?.emails)
   if (!data || !emails) return <LoadingUI />
 
   return (
