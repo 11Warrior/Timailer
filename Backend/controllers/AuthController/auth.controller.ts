@@ -22,8 +22,8 @@ export const callback = (req: Request, res: Response) => {
 
     res.cookie("my_token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
         path: '/'
     });
 
