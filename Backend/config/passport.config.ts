@@ -25,6 +25,7 @@ passport.use(
                 profileImage: avatar,
             },
             create: {
+                // emailId: ,
                 Email: email!,
                 Password: "",
                 FullName: profile.displayName,

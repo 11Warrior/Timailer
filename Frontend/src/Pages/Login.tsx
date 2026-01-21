@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
   const handleGoogleLogin = () => {
-    navigate( `${backendURL}/auth/google`)
+    navigate( `${backendURL}/timailer/auth/google`)
   };
 
   const handleEmailLogin = (e: React.FormEvent) => {
