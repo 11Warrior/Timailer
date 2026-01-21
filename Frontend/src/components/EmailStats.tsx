@@ -4,7 +4,7 @@ import { ClockIcon, StarIcon } from "lucide-react";
 
 export default function EmailStats({ emails }: { emails: EmailProp[] }) {
     // emails.map((email) => (console.log(email)))
-    console.log(emails)
+    // console.log(emails)
     return (
         <div className="max-w-full h-screen">
             {emails?.map((email) => (
