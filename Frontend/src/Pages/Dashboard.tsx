@@ -46,9 +46,14 @@ const Dashboard = () => {
       }).catch((error) => {
         console.log("Error while getting auth user from backend.", error);
       })
+    } catch (error) {
+      console.log("Error while getting auth user");
+    }
+  }, [])
 
-      //emails
-
+  //emails
+  useEffect(() => {
+    try {
       axios.get(`${backendURL}/timailer/getEmails/${data?.id}`, {
         withCredentials: true,
       }).then(res => {
@@ -71,7 +76,7 @@ const Dashboard = () => {
     <div className="w-screen h-screen">
       <Navbar />
       <div className="flex gap-10  w-screen h-screen">
-        <Sidebar userData={data} emails={emails}/>
+        <Sidebar userData={data} emails={emails} />
         <div className="w-full">
 
           <EmailStats emails={emails?.emails} />
