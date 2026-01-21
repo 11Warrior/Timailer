@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.ts",
-    "worker": "nodemon Worker/email.worker.ts"
+    "dev": "nodemon server.ts ",
+    "worker": "nodemon worker/email.worker.ts"
   },
   "type": "module",
   "keywords": [],
