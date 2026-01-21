@@ -1,5 +1,5 @@
 import { ArrowLeft, CalendarIcon, Clock, Paperclip, Upload } from 'lucide-react'
-import { Link, Navigate, redirect, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -15,7 +15,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
-import { backendURL,  parseEmails } from '@/lib/utils';
+import { backendURL, parseEmails } from '@/lib/utils';
 import { Dialog, DialogContent, DialogFooter } from './ui/dialog';
 import { DialogClose, DialogTrigger } from '@radix-ui/react-dialog';
 import { Calendar } from './ui/calendar';
@@ -62,7 +62,7 @@ const ComposeNewEmail = () => {
 
     const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
 
-    const handleSend = (e: Event) => {
+    const handleSend = (e: any) => {
         //sending logic calling backend scheduling things // console.log(senderEmail)
         const date = dateAndTime.date;
         const time = dateAndTime.time;
@@ -107,7 +107,7 @@ const ComposeNewEmail = () => {
             attachmentImage: "",
             body: ""
         })
-        
+
         navigate('/dashboard')
         e.preventDefault();
     }
@@ -152,7 +152,7 @@ const ComposeNewEmail = () => {
                     <input className='hidden' type="file" id='upload-attachment' />
 
                     <label htmlFor="upload-attachment">
-                        <Paperclip width={20} className=" bg-amber-50 text-muted-foreground cursor-pointer" />
+                        <Paperclip width={20} className="  text-muted-foreground cursor-pointer" />
                     </label>
 
 
@@ -189,6 +189,7 @@ const ComposeNewEmail = () => {
 
                                                 <PopoverContent>
                                                     <Calendar
+                                                        required
                                                         mode='single'
                                                         selected={dateAndTime?.date}
                                                         buttonVariant={'secondary'}

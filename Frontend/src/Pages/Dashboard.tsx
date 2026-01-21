@@ -47,6 +47,8 @@ const Dashboard = () => {
         console.log("Error while getting auth user from backend.", error);
       })
 
+      //emails
+
       axios.get(`${backendURL}/timailer/getEmails/${data?.id}`, {
         withCredentials: true,
       }).then(res => {
@@ -61,7 +63,7 @@ const Dashboard = () => {
   }, [data?.id])
 
   // console.log(data)
-  console.log(emails, typeof(emails))
+  // console.log(emails, typeof(emails))
   if (!data || !emails) return <LoadingUI />
 
   return (

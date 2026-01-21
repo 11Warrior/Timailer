@@ -1,15 +1,12 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import type { EmailProp, FrontendAuthResponse } from "@/Pages/Dashboard";
-import { Mail, Clock, ArrowDownIcon, ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import type {  EmailResponse, FrontendAuthResponse } from "@/Pages/Dashboard";
+import { Mail, Clock, ChevronDown } from "lucide-react";
+import {  useNavigate } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import axios from "axios";
 import { backendURL } from "@/lib/utils";
 
-export default function Sidebar({ userData, emails }: { userData: FrontendAuthResponse }) {
+export default function Sidebar({ userData, emails }: { userData: FrontendAuthResponse, emails:  EmailResponse}) {
   const navigate = useNavigate();
 
   const handleLogout = () => {

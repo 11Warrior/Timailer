@@ -1,4 +1,4 @@
-import { Funnel, RefreshCw, RotateCw, Search, SlidersHorizontal } from "lucide-react"
+import { Funnel, RotateCw, Search } from "lucide-react"
 import { Input } from "./ui/input"
 
 const Navbar = () => {
