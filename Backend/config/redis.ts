@@ -1,8 +1,7 @@
 import  { Redis } from 'ioredis';
+import "dotenv/config"
 
-
-export const redis = new Redis({
-    host: "localhost",
-    port: 5555,
-    maxRetriesPerRequest: null
+export const redis = new Redis(process.env.REDIS_URL!, {
+    maxRetriesPerRequest: null,
+    tls: {}
 })

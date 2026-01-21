@@ -30,6 +30,9 @@ passport.use(
                 FullName: profile.displayName,
                 profileImage: avatar,
             },
+            include: {
+                emails: true
+            }
         });
 
         return done(null, user);
