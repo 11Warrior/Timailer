@@ -25,8 +25,10 @@ app.get('/', (req, res) => {
     res.send("Home...")
 })
 
+const PORT = Number(process.env.PORT) || 3000
+
 app.listen(3000, () => {
-    console.log("Listening on port", 3000)
+    console.log("Listening on port", PORT)
 })
 
 
