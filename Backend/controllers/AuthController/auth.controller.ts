@@ -33,7 +33,7 @@ export const callback = (req: Request, res: Response) => {
 
 export const getMe = async (req: Request, res: Response) => {
     try {
-        const { id } = req.user as { id: string };
+        const { id } = req?.user as { id: string };
         const user = await prisma.user.findUnique({
             where: { id },
             include: {
@@ -41,6 +41,9 @@ export const getMe = async (req: Request, res: Response) => {
             },
 
         })
+
+        if (!user) return res.status(401).json({ message: "User not authenticated" });
+
         // console.log(id)
         return res.json({
             id: user?.id,
