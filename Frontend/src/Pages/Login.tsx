@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { backendURL } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
   const handleGoogleLogin = () => {
-    navigate( "http://localhost:3000/timailer/auth/google")
+    navigate( `${backendURL}/auth/google`)
   };
 
   const handleEmailLogin = (e: React.FormEvent) => {
