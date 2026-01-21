@@ -23,7 +23,7 @@ export const callback = (req: Request, res: Response) => {
     res.cookie("my_token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
         path: '/'
     });
 
@@ -61,7 +61,7 @@ export const logOut = async (req: Request, res: Response) => {
         res.clearCookie('my_token', {
             httpOnly: true,
             sameSite: "lax",
-            secure: false,
+            secure: true,
             path: '/'
         });
 

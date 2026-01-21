@@ -22,5 +22,6 @@ export const protectRoute = (req: Request, res: Response, next: NextFunction) =>
         next();
     } catch (error) {
         console.log("Error in protect Route middleware handler.", error)
+        return res.status(401).json({ message: "Unauthorized" })
     }
 }
