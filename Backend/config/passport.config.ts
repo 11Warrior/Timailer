@@ -12,7 +12,7 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.OAUTH_CLIENT_ID!,
         clientSecret: process.env.OAUTH_CLIENT_SECRET!,
-        callbackURL: 'https://timailer-backend.onrender.com/auth/google/callback',
+        callbackURL: 'https://timailer-backend.onrender.com/timailer/auth/google/callback',
         passReqToCallback: true
     }, async (req: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) => {
         const email = profile.emails?.[0]?.value;
