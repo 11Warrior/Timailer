@@ -4,6 +4,7 @@ import EmailRouter from './routes/email/email.route.ts';
 import authRoute from './routes/auth/auth.route.ts';
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
+import './worker/email.worker.ts'
 
 const app = express();
 
